@@ -9,7 +9,7 @@ Code projects.
 ## 🛠 Installing
 
 ```
-poetry add artisan-sphinx-theme
+poetry add sphinx-artisan-theme
 ```
 
 ## 📚 Help
