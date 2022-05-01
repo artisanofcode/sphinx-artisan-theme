@@ -302,6 +302,5 @@ dist
 # Other
 #######################################################################################
 
-src/sphinx_artisan_theme/themes/artisan/static/theme.css
 # Local Netlify folder
 .netlify
