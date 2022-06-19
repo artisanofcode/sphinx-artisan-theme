@@ -28,14 +28,14 @@ jobs:
       run: poetry config virtualenvs.in-project true
 
     - name: set up python cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: python-cache
       with:
         path: .venv
         key: venv-${{ hashFiles('**/poetry.lock') }}
 
     - name: set up nodejs cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: nodejs-cache
       with:
         path: node_modules
