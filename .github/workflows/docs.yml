@@ -10,48 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+    - name: fetch code
+      uses: actions/checkout@v3
+
+    - name: set node version
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        cache: 'yarn'
+
+    - name: install node dependencies
+      run: yarn install --immutable
 
     - name: set python version
       uses: actions/setup-python@v4
       with:
         python-version: "3.10"
 
-    - name: install poetry
-      run: |
-        curl -sSL https://install.python-poetry.org | python - --preview
-
-    - name: Update PATH
-      run: echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-    - name: configure poetry
-      run: poetry config virtualenvs.in-project true
-
-    - name: set up python cache
-      uses: actions/cache@v3
-      id: python-cache
-      with:
-        path: .venv
-        key: venv-${{ hashFiles('**/poetry.lock') }}
-
-    - name: set up nodejs cache
-      uses: actions/cache@v3
-      id: nodejs-cache
-      with:
-        path: node_modules
-        key: node-modules-${{ hashFiles('**/yarn.lock') }}
-      
-    - name: ensure cache is healthy
-      if: steps.python-cache.outputs.cache-hit == 'true'
-      run: timeout 10s poetry run pip --version || rm -rf .venv
-    
     - name: install python dependencies
-      if: steps.python-cache.outputs.cache-hit != 'true'
-      run: poetry install
-    
-    - name: install javascript dependencies
-      if: steps.nodejs-cache.outputs.cache-hit != 'true'
-      run: yarn install
+      uses: artisanal-actions/poetry-install@v1
 
     - name: build docs
       run: make build docs
