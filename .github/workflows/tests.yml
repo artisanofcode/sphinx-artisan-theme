@@ -2,8 +2,15 @@ name: tests
 
 on:
   push:
+    paths-ignore:
+      - 'docs/**'
     branches:
       - main
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+    branches:
+      - '**'
 
 jobs:
   deploy-docs:
@@ -30,5 +37,5 @@ jobs:
     - name: install python dependencies
       uses: artisanal-actions/poetry-install@v1
 
-    - name: build docs
-      run: make build docs
+    - name: test package builds
+      run: make build
