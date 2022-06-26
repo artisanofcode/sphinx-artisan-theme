@@ -33,7 +33,7 @@ docs: update
 
 #: format all source files
 format:
-	poetry run shed
+	poetry run shed --refactor --py39-plus src/**/*.py tests/*.py
 
 #: list avalible make targets
 help:
@@ -53,9 +53,7 @@ setup: bootstrap
 
 #: run the projects test suite
 test:
-	poetry run pylint sphinx_artisan_theme tests
-	poetry run mypy src tests
-	poetry run pytest tests
+	poetry run pytest -vvv --mypy --pylint --pydocstyle --cov --cov-report term-missing --typeguard-packages=sphinx_artisan_theme,tests src tests
 
 #: update the project after a `git pull`
 update: bootstrap

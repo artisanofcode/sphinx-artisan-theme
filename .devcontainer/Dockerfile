@@ -17,8 +17,11 @@ RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
 
-RUN su vscode -c "curl -sSL https://install.python-poetry.org | python3 - --preview"
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends  enchant-2 hunspell-en-gb
 
+RUN su vscode -c "curl -sSL https://install.python-poetry.org | python3 - --preview"
+RUN su vscode -c "pip --no-cache-dir install --user --upgrade pre-commit"
 RUN su vscode -c "npm install -g netlify-cli"
 
 # [Optional] Uncomment this line to install global node packages.

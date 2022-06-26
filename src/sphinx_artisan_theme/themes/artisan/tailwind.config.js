@@ -1,5 +1,9 @@
 module.exports = {
-  content: ["**/*.{html,js}"],
+  content: [`${__dirname}/*.{html,js}`],
+  safelist: [
+    "inline",
+    "align-text-middle",
+  ],
   theme: {
     extend: {
       fontFamily: {

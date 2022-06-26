@@ -2,12 +2,12 @@
 A sphinx theme for Artisan of Code projects.
 """
 
-import docutils.nodes
-import pkg_resources
 import pathlib
 import typing
 
+import docutils.nodes
 import markupsafe
+import pkg_resources
 import sphinx.application
 import sphinx.config
 import sphinx.util.fileutil
@@ -23,22 +23,8 @@ HTML_PERMALINK_ICON = """
 """
 
 
-def _config_inited(
-    app: sphinx.application.Sphinx,  # pylint: disable=unused-argument
-    config: sphinx.config.Config,  # pylint: disable=unused-argument
-) -> None:
-    """
-    config-inited callback
-
-    Update our config here.
-
-    :param app: the sphinx application
-    :param config: the sphinx config
-    """
-
-
-def _builder_inited(app: sphinx.application.Sphinx):
-    if app.builder.format == "html":
+def _builder_inited(app: sphinx.application.Sphinx) -> None:
+    if app.builder and app.builder.format == "html":
         app.add_css_file("https://rsms.me/inter/inter.css")
         app.add_css_file("theme.css")
 
@@ -48,11 +34,20 @@ def _html_page_context(
     pagename: str,  # pylint: disable=unused-argument
     templatename: str,  # pylint: disable=unused-argument
     context: dict[str, object],
-    doctree: docutils.nodes.document | None,  # pylint: disable=unused-argument
+    doctree: typing.Optional[  # pylint: disable=unused-argument
+        docutils.nodes.document
+    ],
 ) -> None:
-    context["html_permalinks_icon"] = markupsafe.Markup(app.config.html_permalinks_icon)
+    if not app.env or not app.config:
+        return
 
-    context["root_title"] = app.env.titles[context["root_doc"]].astext()
+    context["html_permalinks_icon"] = markupsafe.Markup(
+        app.config["html_permalinks_icon"]
+    )
+
+    context["root_title"] = app.env.titles[
+        typing.cast(str, context["root_doc"])
+    ].astext()
 
     if pagename in app.env.titles:
         context["pagetitle"] = app.env.titles[pagename].astext()
@@ -66,29 +61,27 @@ def _html_page_context(
 
 def setup(app: sphinx.application.Sphinx) -> dict[str, typing.Any]:
     """
-    Registration callback
+    Registration callback.
 
     Setup the extension with sphinx
 
     :param app: the sphinx application
     """
-
     for path in THEMES_ROOT.iterdir():
         if not path.joinpath("theme.conf").exists():
             continue
 
-        app.add_html_theme(path.name, path)
+        app.add_html_theme(path.name, str(path))
 
     app.setup_extension("sphinx_artisan_theme.ext.extract_toc")
     app.setup_extension("sphinx_artisan_theme.ext.remove_sections")
 
     app.connect("builder-inited", _builder_inited)
-    app.connect("config-inited", _config_inited)
     app.connect("html-page-context", _html_page_context)
 
     app.add_config_value("author_url", default="unknown", rebuild="html", types=[str])
 
-    app.config.html_permalinks_icon = HTML_PERMALINK_ICON
+    app.config["html_permalinks_icon"] = HTML_PERMALINK_ICON
 
     return {
         "version": __version__,

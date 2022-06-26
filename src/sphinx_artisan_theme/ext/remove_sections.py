@@ -2,10 +2,10 @@
 Remove section tags from sphinx html output.
 """
 
-import docutils.nodes
-import docutils.writers._html_base
 import typing
 
+import docutils.nodes
+import docutils.writers._html_base
 import sphinx.application
 
 
@@ -53,13 +53,12 @@ def _depart_title_html(
 
 def setup(app: sphinx.application.Sphinx) -> dict[str, typing.Any]:
     """
-    Registration callback
+    Registration callback.
 
     Setup the extension with sphinx
 
     :param app: the sphinx application
     """
-
     app.add_node(
         docutils.nodes.section,
         override=True,

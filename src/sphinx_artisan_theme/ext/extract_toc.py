@@ -2,13 +2,10 @@
 Provides jinja2 helpers for customisable tables of contents.
 """
 
-from __future__ import annotations
-
 import dataclasses
-import docutils.nodes
 import typing
 
-
+import docutils.nodes
 import sphinx.addnodes
 import sphinx.application
 import sphinx.environment.adapters.toctree
@@ -17,7 +14,7 @@ import sphinx.environment.adapters.toctree
 @dataclasses.dataclass
 class NavigationItem:
     """
-    Navigation item
+    Navigation item.
 
     Represents an individual link in a table of contents.
 
@@ -29,14 +26,14 @@ class NavigationItem:
 
     title: str
     url: str
-    children: list[NavigationItem]
+    children: "list[NavigationItem]"
     is_active: bool
 
 
 @dataclasses.dataclass
 class NavigationSection:
     """
-    Navigation section
+    Navigation section.
 
     represents a section of the table of contents with optional title.
 
@@ -44,21 +41,20 @@ class NavigationSection:
     :param children: child navigation items
     """
 
-    title: str | None
-    children: list[NavigationItem]
+    title: typing.Optional[str]
+    children: "list[NavigationItem]"
 
 
 def _node_to_navigation_items(node: docutils.nodes.bullet_list) -> list[NavigationItem]:
     """
-    Node to NavigationItem
+    Node to NavigationItem.
 
-    convert a docutils TocTree recursively into a tree of :class:`NavigationItem`.
+    Convert a docutils TocTree recursively into a tree of :class:`NavigationItem`.
 
     :param node: a bulleted list of references from docutils
 
     :returns: a generic non docutils representation
     """
-
     items = []
 
     for child in node.children:
@@ -86,10 +82,12 @@ def _html_page_context(
     pagename: str,
     templatename: str,  # pylint: disable=unused-argument
     context: dict[str, object],
-    doctree: docutils.nodes.document | None,  # pylint: disable=unused-argument
+    doctree: typing.Optional[  # pylint: disable=unused-argument
+        docutils.nodes.document
+    ],
 ) -> None:
     """
-    html-page-context callback
+    html-page-context callback.
 
     Wire up our custom jinja2 helpers.
 
@@ -100,18 +98,24 @@ def _html_page_context(
     :param doctree: reST doctree
     """
 
-    def get_navigation(**kwargs: object) -> list[NavigationItem]:
+    def get_navigation(**kwargs: typing.Any) -> list[NavigationSection]:
         """
-        Get navigation
+        Get navigation.
 
         :returns: the navigation tree
         """
+        if not app.env or not app.builder:
+            return []
 
         builder = sphinx.environment.adapters.toctree.TocTree(app.env)
 
         kwargs.setdefault("collapse", False)
 
-        toctree = builder.get_toctree_for(pagename, app.builder, **kwargs)
+        toctree = builder.get_toctree_for(
+            pagename,
+            app.builder,
+            **kwargs,
+        )
 
         sections = []
 
@@ -138,10 +142,12 @@ def _html_page_context(
 
     def get_table_of_contents() -> list[NavigationItem]:
         """
-        Get page navigation
+        Get page navigation.
 
         :returns: the pages navigation tree
         """
+        if not app.env or not app.builder:
+            return []
 
         builder = sphinx.environment.adapters.toctree.TocTree(app.env)
 
@@ -160,13 +166,12 @@ def _html_page_context(
 
 def setup(app: sphinx.application.Sphinx) -> dict[str, typing.Any]:
     """
-    Registration callback
+    Registration callback.
 
     Setup the extension with sphinx
 
     :param app: the sphinx application
     """
-
     app.connect("html-page-context", _html_page_context)
 
     return {"parallel_read_safe": True, "parallel_write_safe": True}
