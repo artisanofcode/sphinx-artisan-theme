@@ -4,14 +4,35 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "publish"
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
-  deploy-docs:
+  build:
     runs-on: ubuntu-latest
 
     steps:
     - name: fetch code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
+
+    - name: setup pages
+      id: pages
+      uses: actions/configure-pages@v1
+
+    - name: install hunspell-en-gb
+      run: sudo apt-get install -y hunspell-en-gb
 
     - name: set node version
       uses: actions/setup-node@v3
@@ -19,13 +40,14 @@ jobs:
         node-version: 16
         cache: 'yarn'
 
-    - name: install node dependencies
-      run: yarn install --immutable
-
     - name: set python version
       uses: actions/setup-python@v4
       with:
         python-version: "3.10"
+
+
+    - name: install node dependencies
+      run: yarn install --immutable
 
     - name: install python dependencies
       uses: artisanal-actions/poetry-install@v1
@@ -33,8 +55,18 @@ jobs:
     - name: build docs
       run: make build docs
 
-    - name: deploy site
-      env:
-        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      run: netlify deploy --dir=dist/docs --prod
+    - name: upload artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: ./dist/docs
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: deploy to pages
+        id: deployment
+        uses: actions/deploy-pages@v1
