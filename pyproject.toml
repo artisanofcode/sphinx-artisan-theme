@@ -13,7 +13,7 @@ Sphinx = "^4.4.0"
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.1"
 sphinx-autobuild = "^2021.3.14"
-shed = "^0.9.4"
+shed = ">=0.9.4,<2023.4.0"
 sphinx-lint = "^0.2"
 restructuredtext-lint = "^1.4.0"
 myst-parser = "^0.17.0"
