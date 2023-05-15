@@ -8,7 +8,7 @@ packages = [{include = "sphinx_artisan_theme", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-Sphinx = "^4.4.0"
+Sphinx = ">=4.4,<6.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.1"
