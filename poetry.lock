@@ -1349,13 +1349,13 @@ test = ["mypy (>=1.2.0)", "pytest (>=7)"]
 
 [[package]]
 name = "types-docutils"
-version = "0.18.3"
+version = "0.20.0.1"
 description = "Typing stubs for docutils"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-docutils-0.18.3.tar.gz", hash = "sha256:a0ef831dc20635f350fa9cff591231c31d27e75771e59fd6c979b6c0c7e03292"},
-    {file = "types_docutils-0.18.3-py3-none-any.whl", hash = "sha256:b54b6fd599914093a5aab08dbf1cba96eb107cdeb4210bbe4ccd233fe3a71d9b"},
+    {file = "types-docutils-0.20.0.1.tar.gz", hash = "sha256:f682b5459a1e6e28208742adb0be8573d1ecbddd442f00d202b0278c1c4418a2"},
+    {file = "types_docutils-0.20.0.1-py3-none-any.whl", hash = "sha256:6b17cbe57cb282158feb41d154cddaeabc16f1d6cff3c7308bd3056f42aa7cd2"},
 ]
 
 [[package]]
@@ -1503,4 +1503,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "94f26da2105e70c95962d53c8e84e2fc70574c4425184eae840b50a45c7984c0"
+content-hash = "eecb9a60298bdbf8fd7e5576c994400ae6b4972b8458a7f264a38e0dcfa107db"
