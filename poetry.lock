@@ -1241,13 +1241,13 @@ test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "sphinx-lint"
-version = "0.6.7"
+version = "0.6.8"
 description = "Check for stylistic and formal issues in .rst and .py files included in the documentation."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "sphinx-lint-0.6.7.tar.gz", hash = "sha256:704a9bffd9117c77accf4a3c46f8ab3b4cb6ef51419b5d21a4386042f0616789"},
-    {file = "sphinx_lint-0.6.7-py3-none-any.whl", hash = "sha256:ab5fda49c551a706ab14cd603c3b30a11178ef7ca6194bfd0e057a2201accadc"},
+    {file = "sphinx-lint-0.6.8.tar.gz", hash = "sha256:8c51ab6f5a959362ddb40c5821206bb00987fe978caf46ef5362869022a4f1a2"},
+    {file = "sphinx_lint-0.6.8-py3-none-any.whl", hash = "sha256:3f65e6d86cd5e1270493fb0d969ecafa409b580f9f2ca53869a77a1f1727db15"},
 ]
 
 [package.dependencies]
