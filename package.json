@@ -3,7 +3,7 @@
   "private": true,
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/forms": "^0.5.5",
+    "@tailwindcss/forms": "^0.5.6",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.9",
     "netlify-cli": "^16.2.0",
